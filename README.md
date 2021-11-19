@@ -12,7 +12,7 @@ smbclient -L 10.10.10.40 -N
 smbclient //10.10.10.40/Users -N
 ```
 ```Shell
-smbmap -H 10.10.10.40 -u 'null'
+smbmap -H 10.10.10.40 -u ''
 ```
 ```Shell
 mkdir smbFolder
