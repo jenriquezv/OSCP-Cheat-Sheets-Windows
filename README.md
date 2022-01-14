@@ -17,6 +17,7 @@ nmap -Pn -sT -n --script smb-enum-shares.nse  10.10.10.40 -p 135,139,445
 ```Shell
 smbclient -L 10.10.10.40 -N 
 smbclient //10.10.10.40/Users -N
+smbclient -L 10.10.10.125 -N 2>/dev/null | grep "Disk" | awk '{print $1}' | while read shared; do echo "${shared} - "; smbclient -N //10.10.10.125/${shared} -c 'dir'; echo; done 
 ```
 ```Shell
 smbmap -H 10.10.10.40 -u ''
@@ -66,6 +67,16 @@ searchsploit -m 42315
 ```
 
 ## Explotation
+
+
+#### SQL
+```Shell
+sqsh -S 10.10.10.125 -U 'sa'
+```
+```Shell
+sqsh -S 10.10.10.125 -U 'sa'
+```
+/usr/share/doc/python-impacket/examples/mssqlclient.py WORKGROUP/reporting:PcwTWTHRwryjc\$c6@10.10.10.125 -db volume  -windows-auth
 
 #### Shells
 ```Shell
