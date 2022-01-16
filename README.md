@@ -330,7 +330,8 @@ hashcat -m 13100 -a 0 hash.txt /usr/share/wordlists/rockyou.txt --force
 ```
 
 #### Golden ticket attack - create TGT - first get the krbtgt hash NTLM 
-# Required Admin Domain
+#Required Admin Domain
+
 ```Shell
 powershell
 PS C:\> Set-ExecutionPolicy Unrestricted
