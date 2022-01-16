@@ -94,7 +94,7 @@ searchsploit -m 42315
 
 ### RDP
 ```Shell
-xfreerdp /u:<user> /p:<pwd> <ip> /f
+xfreerdp /u:<user> /p:<pwd> /v:<ip> /f
 ```
 
 ### Firewall
