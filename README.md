@@ -106,7 +106,8 @@ searchsploit -m 42315
 
 ### RDP
 ```Shell
-xfreerdp /u:<user> /p:<pwd> /v:<ip> /f
+xfreerdp /u:dc /p:pwd /w:1000 /h:700 /v:192.168.100.20 +clipboard
+xfreerdp /d:yuncorp.local /u:Administrator /p:P@\$\$w0rd\! /w:1000 /h:700 /v:192.168.100.20 +clipboard
 ```
 
 ### Firewall
