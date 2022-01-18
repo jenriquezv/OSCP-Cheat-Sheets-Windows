@@ -25,6 +25,7 @@ smbmap -H 10.10.10.40 -u ''
 # Enumerate files
 mkdir smbFolder
 mount -t cifs //10.10.10.40/SYSVOL /tmp/smbFolder -o username=null,password=null,domain=WORKGROUP,rw
+mount -t cifs //10.10.10.40/SYSVOL /tmp/smbFolder -o username=null,password=null,domain=WORKGROUP,rw -o vers=2.1
 tree # view files
 ```
 ```Shell
