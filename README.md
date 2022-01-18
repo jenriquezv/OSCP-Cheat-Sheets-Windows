@@ -27,6 +27,11 @@ mkdir smbFolder
 mount -t cifs //10.10.10.40/SYSVOL /tmp/smbFolder -o username=null,password=null,domain=WORKGROUP,rw
 mount -t cifs "//10.10.10.103/Department Shares" folder  -o vers=2.1
 tree # view files
+
+find . -type d | while read dir; do touch ${dir}/jenriquez 2>/dev/null && echo "${dir}" && rm ${dir}/jenriquez; mkdir ${dir}/jenriquez 2>/dev/null && echo "${dir}" && rmdir ${dir}/jenriquez; done 
+
+watch -d "ls /mnt/folder/public/*; /mnt/folder/otro*"
+
 ```
 ```Shell
 smbcacls //10.10.10.40/Users Admin/Desktop -N
