@@ -29,6 +29,7 @@ smbclient -L 10.10.10.125 -N 2>/dev/null | grep "Disk" | awk '{print $1}' | whil
 ```
 ```console
 smbmap -H 10.10.10.40 -u ''
+smbmap -H 10.10.10.40 -u 'Guest'
 ```
 ```Shell
 # Enumerate files
@@ -56,7 +57,7 @@ smbcacls //10.10.10.40/Users Admin/Desktop -N | grep Everyone
 
 ### rpcclient
 ```Shell
-rpcclient -U "" -N 10.10.10.52 #null session
+rpcclient -U "" 10.10.10.52 #null session
 enumdomusers
 
 rpcclient -U "James%J@m3s_P@ssW0rd\!" 10.10.10.52 -c "enumdomusers"
