@@ -434,6 +434,13 @@ C:\windows\SysNative\WindowsPowershell\v1.0\powershell.exe -exec Bypass -c "IEX 
 ```Shell
 PS C:\> [Environment]::Is64BitOperatingSystem
 PS C:\> [Environment]::Is64BitProcess
+
+Get-ExecutionPolicy
+PowerShell.exe -ExecutionPolicy Bypass -File .runme.ps1
+PowerShell.exe -ExecutionPolicy UnRestricted -File .runme
+Set-ExecutionPolicy Bypass -Scope Process
+
+$ExecutionContext.SessionState.LanguageMode
 ```
 
 ### Crack
