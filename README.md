@@ -20,6 +20,7 @@ nmap --script smb-vuln* 192.168.76.40
 nmap -Pn -sT -n --script smb-enum-shares.nse  10.10.10.40 -p 135,139,445
 ```
 ```console
+smbclient -L 192.168.120.140 -U " "%" " # nullsesion
 smbclient -L 10.10.10.40 -U <users>%<pwd> 2>/dev/null 
 smbclient -m SMB2 -L 10.10.10.40 -N 
 smbclient //10.10.10.40/Users -N
