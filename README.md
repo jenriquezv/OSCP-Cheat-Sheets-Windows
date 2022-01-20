@@ -414,7 +414,7 @@ https://pentestlab.blog/2017/05/29/applocker-bypass-msbuild/
 ```Shell
 https://github.com/Hackplayers/evil-winrm
 #Winrm
-ruby /opt/evil-winrm/evil-winrm.rb -i 192.168.76.152 -u scripting -p 'FriendsDontLetFriendsBase64Passwords'
+ruby /opt/evil-winrm/evil-winrm.rb -i 192.168.76.152 -u scripting -p 'FriendsDontLetFriendsBase64Passwords' -s /opt/tools
 ```
 ```Shell
 # impacket-smbserver folder $(pwd)   
