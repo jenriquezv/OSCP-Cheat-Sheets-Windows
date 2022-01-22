@@ -509,6 +509,10 @@ https://raw.githubusercontent.com/ohnozzy/Exploit/master/MS09_050.py
 
 python MS09_050.py 192.168.76.40
 
+#### CVE2009-2585 - HP Power Manager 4.2
+https://raw.githubusercontent.com/Muhammd/HP-Power-Manager/master/hpm_exploit.py
+
+
 ## Post Explotation
 
 ### Windows Users
