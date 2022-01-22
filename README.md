@@ -407,8 +407,6 @@ https://pentestlab.blog/2017/05/23/applocker-bypass-rundll32/
 https://pentestlab.blog/2017/05/29/applocker-bypass-msbuild/
 ```
 
-
-
 ### Shells
 
 ```Shell
@@ -459,6 +457,8 @@ kdeEjDowkS*      (kostas)
 1g 0:00:00:00 DONE (2022-01-12 23:21) 100.0g/s 100.0p/s 100.0c/s 100.0C/s kdeEjDowkS*
 Use the "--show" option to display all of the cracked passwords reliably
 Session completed
+
+hashcat -O -m 5600 -a 0 -r /usr/share/hashcat/rules/best64.rule -o crack.txt hash.txt /usr/share/wordlists/rockyou.txt
 ```
 
 ### Exploits
