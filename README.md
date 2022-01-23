@@ -256,6 +256,7 @@ wmic useraccount get name,sid
 # Linux - Enumerate users
 # To Domain controller with any domain user
 impacket-GetADUsers -all  yuncorp.local/yenriquez -dc-ip 192.168.100.20
+impacket-GetADUsers -all  yuncorp.local/yenriquez:<pwd> -dc-ip 192.168.100.20
 ```
 ```Shell
 crackmapexec smb 10.10.10.52 -u 'James' -p 'J@m3s_P@ssW0rd!' --shares
