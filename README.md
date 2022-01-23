@@ -58,7 +58,8 @@ IconFile=\\X.X.X.X\folder\jenriquez
 # Permissions
 smbcacls //10.10.10.40/Users Admin/Desktop -N
 smbcacls //10.10.10.40/Users Admin/Desktop -N | grep Everyone
-smbcacls //10.10.10.40/Users domain.local -U 'user%pwd' -N
+smbcacls //10.10.10.40/Users domain.local -U 'user%pwd'
+smbcacls //10.10.10.40/Users domain.local/folderdir -U 'user%pwd'
 ```
 
 ```Shell
