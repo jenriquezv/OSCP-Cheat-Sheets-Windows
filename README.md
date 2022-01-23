@@ -216,8 +216,10 @@ mitm6 -d yuncorp.local
 ```
 
 ### AD
+
 https://book.hacktricks.xyz/windows/active-directory-methodology
-*** importante sincronisar tiempo con DC "rdate -n 10.10.10.52"
+
+*** Error: clock skew too great  - Importante sincronisar tiempo con DC "rdate -n 10.10.10.52"
 
 ```Shell
 crackmapexec smb 192.168.100.0/24 
