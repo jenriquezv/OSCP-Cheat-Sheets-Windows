@@ -42,6 +42,7 @@ tree # view files
 find . -type d | while read dir; do touch ${dir}/jenriquez 2>/dev/null && echo "${dir}" && rm ${dir}/jenriquez; mkdir ${dir}/jenriquez 2>/dev/null && echo "${dir}" && rmdir ${dir}/jenriquez; done 
 
 find . -type f | xargs file | grep -v 'cannot'
+smbmap -d carpeta -H 10.10.10.100 -R FolderShared
 
 watch -d "ls /mnt/folder/public/*; /mnt/folder/otro*"
 
