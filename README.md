@@ -37,6 +37,7 @@ smbmap -H 10.10.10.40 -u 'Guest'
 mkdir smbFolder
 mount -t cifs //10.10.10.40/SYSVOL /tmp/smbFolder -o username=null,password=null,domain=WORKGROUP,rw
 mount -t cifs "//10.10.10.103/Department Shares" folder  -o vers=2.1
+#vers=1.0, vers=2.0, vers=2.1, vers=3.0
 df -k -F cifs
 tree # view files
 
