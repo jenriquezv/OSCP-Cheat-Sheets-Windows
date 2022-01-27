@@ -228,14 +228,17 @@ https://book.hacktricks.xyz/windows/ntlm/places-to-steal-ntlm-creds
 https://book.hacktricks.xyz/windows/active-directory-methodology
 
 Kerberos cheatsheet
+
 https://gist.github.com/TarlogicSecurity/2f221924fef8c14a1d8e29f3cb5c5c4a
 
 https://github.com/S1ckB0y1337/Active-Directory-Exploitation-Cheat-Sheet
 
 LDAP
+
 https://book.hacktricks.xyz/pentesting/pentesting-ldap
 
 AD
+
 https://viperone.gitbook.io/pentest-everything/everything/everything-active-directory
 
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Active%20Directory%20Attack.md
