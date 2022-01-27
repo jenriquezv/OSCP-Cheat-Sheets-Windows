@@ -570,6 +570,7 @@ https://raw.githubusercontent.com/Muhammd/HP-Power-Manager/master/hpm_exploit.py
 
 
 ## Post Explotation
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md
 
 ### Windows Users
 ```Shell
@@ -637,6 +638,8 @@ Ciphers +aes128-cbc
 
 ## Priv
 https://github.com/SecWiki/windows-kernel-exploits
+
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md
 
 #PowerUp.ps1
 ```Shell
