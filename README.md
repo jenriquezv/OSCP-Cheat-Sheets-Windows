@@ -1,10 +1,7 @@
 # OSCP Cheat Sheets Windows
 Preparation for OSCP
 
-https://www.ired.team/
-
-https://gist.github.com/m8r0wn/b6654989035af20a1cb777b61fbc29bf
-
+https://gist.github.com/m8r0wn/b6654989035af20a1cb777b61fbc29bf \
 https://0xsp.com/offensive/privilege-escalation-cheatsheet
 
 ## RECON
