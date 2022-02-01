@@ -271,7 +271,12 @@ $ExecutionContext.SessionState.LanguageMode
 ```
 
 ### Crack
+https://www.onlinehashcrack.com/tools-pdf-hash-extractor.php
 
+```Shell
+perl /usr/share/john/pdf2john-3.pl Infrastructure.pdf
+john --wordlist=/usr/share/wordlists/rockyou.txt hash
+```
 ```Shell
 # Hast NetNTLM
 root@kali:/OSCPv3/htb/Optimum# cat hash 
@@ -291,6 +296,10 @@ hashcat -O -m 5600 -a 0 -r /usr/share/hashcat/rules/best64.rule -o crack.txt has
 ```
 
 ### Exploits
+
+```Shell
+curl -s -X POST -d '' 'http://192.168.112.99:33333/list-running-procs' | head
+```
 
 #### WebDAV IIS 6
 ```Shell
