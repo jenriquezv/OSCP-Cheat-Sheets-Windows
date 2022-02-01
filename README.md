@@ -656,3 +656,7 @@ https://github.com/SecWiki/windows-kernel-exploits/blob/master/MS16-098/bfill.ex
 
 #### MS16-032 - CVE-2016-0099 - Microsoft Windows 7 < 10 / 2008 < 2012 R2 (x86/x64)
 https://github.com/SecWiki/windows-kernel-exploits/tree/master/MS16-032
+
+
+### Pivot
+https://notchxor.github.io/oscp-notes/6-post-exploitation/4.4-pivoting+tunneling/
