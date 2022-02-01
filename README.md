@@ -300,6 +300,7 @@ dav:/> move cmd.txt cmd.aspx
 ```
 ```Shell
 # davtest -url http://10.10.10.15
+# davtest -url http://192.168.102.127:8000/imagefs/ab367e7961f629bc/images/
 ```
 
 #### LFI / RFI
@@ -547,6 +548,15 @@ Find-PathDLLHijack
 ### Task
 ```Shell
 schtasks /query /fo LIST /v | select-string 'TFTP' -context 10 
+```
+
+### Weak services
+```Shell
+sc qc bd
+icacls bd.exe
+# (RX) or (F) or everyone
+whoami /priv
+shutdown -r
 ```
 
 ### Group policy preferences
