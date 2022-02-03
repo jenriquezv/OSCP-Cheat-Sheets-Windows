@@ -6,6 +6,8 @@ https://0xsp.com/offensive/privilege-escalation-cheatsheet \
 https://pentesting.zeyu2001.com/proving-grounds/get-to-work/nickel \
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md \
 
+https://guide.offsecnewbie.com/privilege-escalation/windows-pe
+
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Office%20-%20Attacks.md \
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Powershell%20-%20Cheatsheet.md \
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Persistence.md \
