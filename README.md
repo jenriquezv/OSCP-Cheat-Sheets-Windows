@@ -6,14 +6,11 @@ https://0xsp.com/offensive/privilege-escalation-cheatsheet \
 https://pentesting.zeyu2001.com/proving-grounds/get-to-work/nickel \
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md \
 
-
-https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Office%20-%20Attacks.md
-https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Powershell%20-%20Cheatsheet.md
-https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Persistence.md
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Office%20-%20Attacks.md \
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Powershell%20-%20Cheatsheet.md \
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Persistence.md \
 
 ## RECON
-
-
 ### SMB
 https://www.hackingarticles.in/a-little-guide-to-smb-enumeration/ \
 https://github.com/m8r0wn/nullinux
@@ -181,6 +178,7 @@ https://github.com/Kevin-Robertson/Inveigh.git
 
 
 ### SQL
+https://guide.offsecnewbie.com/5-sql
 ```Shell
 sqsh -S 10.10.10.125 -U 'sa'
 ```
